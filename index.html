@@ -1,0 +1,956 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>РАСПЯТИЕ — sad satan</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html, body {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            background: #0a0a0a;
+            font-family: "Courier New", monospace;
+            color: #aaa;
+            cursor: crosshair;
+            user-select: none;
+            -webkit-user-select: none;
+        }
+
+        /* ========== CRT ЭФФЕКТЫ ========== */
+        #noise {
+            position: fixed;
+            inset: 0;
+            z-index: 1;
+            pointer-events: none;
+            opacity: 0.25;
+        }
+
+        #vhs {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: 3;
+            background: repeating-linear-gradient(
+                transparent 0px,
+                transparent 2px,
+                rgba(255, 255, 255, 0.04) 3px,
+                rgba(255, 255, 255, 0.04) 4px
+            );
+            mix-blend-mode: overlay;
+        }
+
+        #rgb {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: 4;
+            opacity: 0.06;
+            background: linear-gradient(90deg, 
+                rgba(255, 0, 0, 0.3), 
+                transparent, 
+                rgba(0, 120, 255, 0.3));
+            animation: rgbShift 8s infinite linear;
+        }
+
+        @keyframes rgbShift {
+            0% { transform: translateX(0); }
+            25% { transform: translateX(2px); }
+            50% { transform: translateX(-2px); }
+            75% { transform: translateX(1px); }
+            100% { transform: translateX(0); }
+        }
+
+        #vignette {
+            position: fixed;
+            inset: -5%;
+            pointer-events: none;
+            z-index: 5;
+            background: radial-gradient(circle, 
+                transparent 40%, 
+                rgba(0, 0, 0, 0.8));
+        }
+
+        /* ========== ОСНОВНАЯ СЦЕНА ========== */
+        #scene {
+            position: relative;
+            z-index: 2;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            transition: all 0.3s ease;
+        }
+
+        #title {
+            font-size: 72px;
+            letter-spacing: 12px;
+            color: #999;
+            text-shadow: 
+                0 0 10px rgba(255, 0, 0, 0.3),
+                2px 2px 0 #000;
+            animation: titleFlicker 4s infinite;
+            cursor: pointer;
+            z-index: 10;
+            pointer-events: auto;
+        }
+
+        #title:hover {
+            color: #bbb;
+            text-shadow: 0 0 20px rgba(255, 0, 0, 0.5);
+        }
+
+        @keyframes titleFlicker {
+            0%, 100% { opacity: 1; }
+            45% { opacity: 0.3; }
+            46% { opacity: 0.9; }
+            47% { opacity: 0.2; }
+            48% { opacity: 0.8; }
+        }
+
+        #subtitle {
+            margin-top: 10px;
+            font-size: 16px;
+            opacity: 0.5;
+            letter-spacing: 5px;
+            color: #888;
+            animation: subtitlePulse 6s infinite;
+            pointer-events: none;
+        }
+
+        @keyframes subtitlePulse {
+            0%, 100% { opacity: 0.5; }
+            50% { opacity: 0.2; }
+        }
+
+        .crosses {
+            display: flex;
+            gap: 120px;
+            margin: 40px 0;
+            position: relative;
+            z-index: 10;
+        }
+
+        .cross {
+            position: relative;
+            width: 160px;
+            height: 300px;
+            filter: drop-shadow(0 0 15px rgba(255, 255, 255, 0.05));
+            transition: all 0.5s ease;
+            cursor: pointer;
+            pointer-events: auto;
+        }
+
+        .cross:hover {
+            filter: drop-shadow(0 0 25px rgba(255, 0, 0, 0.3));
+            transform: scale(1.05);
+        }
+
+        .post {
+            position: absolute;
+            left: 71px;
+            width: 18px;
+            height: 100%;
+            background: linear-gradient(#3a2a1a, #1a120a);
+            box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.5);
+            pointer-events: none;
+        }
+
+        .beam {
+            position: absolute;
+            top: 70px;
+            left: 10px;
+            width: 140px;
+            height: 18px;
+            background: linear-gradient(#3a2a1a, #1a120a);
+            box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.5);
+            pointer-events: none;
+        }
+
+        .reverse {
+            transform: rotate(180deg);
+            opacity: 0.3;
+        }
+
+        .rope {
+            position: absolute;
+            top: 90px;
+            width: 2px;
+            height: 60px;
+            background: #6a5a3a;
+            transform-origin: top;
+            animation: swing 7s ease-in-out infinite;
+            pointer-events: none;
+        }
+
+        .r1 { left: 15px; }
+        .r2 { left: 40px; animation-delay: 1s; }
+        .r3 { left: 100px; animation-delay: 0.5s; }
+        .r4 { left: 125px; animation-delay: 1.5s; }
+
+        @keyframes swing {
+            0%, 100% { transform: rotate(-4deg); }
+            50% { transform: rotate(7deg); }
+        }
+
+        .man {
+            position: absolute;
+            top: 45px;
+            left: -4px;
+            width: 10px;
+            height: 18px;
+            background: #000;
+            border-radius: 5px;
+            box-shadow: 0 0 5px rgba(255, 0, 0, 0.2);
+            pointer-events: none;
+        }
+
+        #tv {
+            width: 220px;
+            height: 120px;
+            background: #0a0a0a;
+            border: 4px solid #3a3a3a;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 
+                0 0 20px rgba(0, 255, 0, 0.05),
+                inset 0 0 20px rgba(0, 0, 0, 0.5);
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            z-index: 10;
+            pointer-events: auto;
+        }
+
+        #tv:hover {
+            box-shadow: 
+                0 0 30px rgba(0, 255, 0, 0.15),
+                inset 0 0 20px rgba(0, 0, 0, 0.5);
+            border-color: #4a4a4a;
+        }
+
+        #tv::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: repeating-linear-gradient(
+                transparent 0px,
+                transparent 2px,
+                rgba(255, 255, 255, 0.03) 3px,
+                rgba(255, 255, 255, 0.03) 4px
+            );
+            pointer-events: none;
+        }
+
+        #screen {
+            font-size: 24px;
+            color: #6a8a6a;
+            text-shadow: 0 0 8px rgba(0, 255, 0, 0.3);
+            z-index: 2;
+            pointer-events: none;
+        }
+
+        #counter {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 100;
+            font-size: 14px;
+            color: #555;
+            pointer-events: none;
+            text-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+        }
+
+        #hint {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 100;
+            font-size: 12px;
+            color: #444;
+            pointer-events: none;
+            text-align: center;
+            transition: opacity 2s;
+        }
+
+        .secret {
+            position: fixed;
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            cursor: pointer;
+            background: rgba(255, 255, 255, 0.03);
+            border: 2px solid rgba(255, 255, 255, 0.08);
+            transition: all 0.3s ease;
+            z-index: 50;
+            pointer-events: auto;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .secret:hover {
+            background: rgba(255, 0, 0, 0.15);
+            border-color: rgba(255, 0, 0, 0.4);
+            box-shadow: 0 0 20px rgba(255, 0, 0, 0.4);
+            transform: scale(1.3);
+        }
+
+        .secret::after {
+            content: "";
+            width: 5px;
+            height: 5px;
+            background: rgba(255, 255, 255, 0.4);
+            border-radius: 50%;
+        }
+
+        .secret.found {
+            background: rgba(0, 255, 0, 0.1);
+            border-color: rgba(0, 255, 0, 0.3);
+            pointer-events: none;
+            opacity: 0.3;
+        }
+
+        #redFrame {
+            position: fixed;
+            inset: 0;
+            background: rgba(100, 0, 0, 0.3);
+            pointer-events: none;
+            z-index: 60;
+            opacity: 0;
+            transition: opacity 0.1s;
+        }
+
+        #hallCanvas {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: 55;
+            display: none;
+        }
+
+        #fakeCursor {
+            position: fixed;
+            width: 16px;
+            height: 16px;
+            border: 2px solid rgba(255, 255, 255, 0.5);
+            transform: rotate(45deg);
+            pointer-events: none;
+            z-index: 120;
+            display: none;
+            animation: cursorBlink 0.5s infinite;
+        }
+
+        @keyframes cursorBlink {
+            0%, 100% { opacity: 0.8; }
+            50% { opacity: 0.2; }
+        }
+
+        #shadow {
+            position: fixed;
+            width: 30px;
+            height: 30px;
+            background: rgba(0, 0, 0, 0.8);
+            border-radius: 50%;
+            filter: blur(10px);
+            pointer-events: none;
+            z-index: 110;
+            display: none;
+        }
+
+        #ending {
+            position: fixed;
+            inset: 0;
+            background: #000;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 200;
+            flex-direction: column;
+            gap: 30px;
+        }
+
+        #ending .cross {
+            font-size: 120px;
+            color: #666;
+            animation: spin 20s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .echo {
+            position: fixed;
+            inset: 0;
+            opacity: 0.15;
+            pointer-events: none;
+            mix-blend-mode: screen;
+            z-index: 60;
+        }
+
+        .notification {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: #666;
+            font-size: 18px;
+            pointer-events: none;
+            z-index: 150;
+            opacity: 0;
+            transition: opacity 0.5s;
+            text-align: center;
+            text-shadow: 0 0 10px rgba(0, 0, 0, 0.8);
+        }
+
+        @media (max-width: 768px) {
+            #title { font-size: 40px; letter-spacing: 6px; }
+            #subtitle { font-size: 12px; }
+            .crosses { gap: 60px; margin: 25px 0; }
+            .cross { width: 100px; height: 200px; }
+            .post { left: 41px; width: 14px; }
+            .beam { top: 50px; left: 5px; width: 90px; height: 14px; }
+            #tv { width: 160px; height: 90px; }
+            #screen { font-size: 18px; }
+            .rope { height: 40px; top: 60px; }
+            .r1 { left: 8px; }
+            .r2 { left: 25px; }
+            .r3 { left: 65px; }
+            .r4 { left: 82px; }
+        }
+    </style>
+</head>
+<body>
+    <canvas id="noise"></canvas>
+    <div id="vhs"></div>
+    <div id="rgb"></div>
+    <div id="vignette"></div>
+    <div id="counter">СЕКРЕТЫ: 0/10</div>
+    <div id="hint">Кликай на элементы... Ищи скрытые точки... Shift+R — сброс</div>
+    <div class="notification" id="notification"></div>
+
+    <div id="scene">
+        <h1 id="title">РАСПЯТИЕ</h1>
+        <div id="subtitle">перевёрнутый крест</div>
+
+        <div class="crosses" id="crosses">
+            <div class="cross" id="leftCross">
+                <div class="post"></div>
+                <div class="beam"></div>
+                <div class="rope r1"><div class="man"></div></div>
+                <div class="rope r2"><div class="man"></div></div>
+                <div class="rope r3"><div class="man"></div></div>
+                <div class="rope r4"><div class="man"></div></div>
+            </div>
+
+            <div class="cross reverse" id="rightCross">
+                <div class="post"></div>
+                <div class="beam"></div>
+            </div>
+        </div>
+
+        <div id="tv">
+            <div id="screen">...</div>
+        </div>
+    </div>
+
+    <div id="redFrame"></div>
+    <div id="hallCanvas"></div>
+    <div id="fakeCursor"></div>
+    <div id="shadow"></div>
+
+    <div id="ending">
+        <div class="cross">✝</div>
+        <div style="color: #666; font-size: 20px;">ТЫ НАШЁЛ ВСЁ</div>
+    </div>
+
+    <script>
+        (function() {
+            'use strict';
+
+            // ==================== ЭЛЕМЕНТЫ ====================
+            const canvas = document.getElementById('noise');
+            const ctx = canvas.getContext('2d');
+            const scene = document.getElementById('scene');
+            const title = document.getElementById('title');
+            const subtitle = document.getElementById('subtitle');
+            const crosses = document.getElementById('crosses');
+            const leftCross = document.getElementById('leftCross');
+            const rightCross = document.getElementById('rightCross');
+            const tv = document.getElementById('tv');
+            const screen = document.getElementById('screen');
+            const counter = document.getElementById('counter');
+            const redFrame = document.getElementById('redFrame');
+            const hallCanvas = document.getElementById('hallCanvas');
+            const fakeCursor = document.getElementById('fakeCursor');
+            const shadow = document.getElementById('shadow');
+            const ending = document.getElementById('ending');
+            const notification = document.getElementById('notification');
+            const noise = document.getElementById('noise');
+            const vhs = document.getElementById('vhs');
+            const rgb = document.getElementById('rgb');
+            const vignette = document.getElementById('vignette');
+
+            let mouseX = 0, mouseY = 0;
+            let signalBroken = false;
+            let secretFound = new Set();
+            let worldPhase = 0;
+
+            // ==================== ДАННЫЕ ====================
+            const names = ['Никола', 'Авель', 'Даниил', 'Серафим', 'ЖЕРТВА', 'ОТЕЦ'];
+            const glitches = ['▒▒▒▒▒▒', '▓▓▓▓▓▓', '//////', '......', '██████', '::::::', '------', '╬╬╬╬╬╬', '☠☠☠☠☠☠'];
+            
+            const secretPositions = [
+                { x: 8, y: 12 }, { x: 91, y: 10 }, { x: 50, y: 26 }, 
+                { x: 14, y: 58 }, { x: 82, y: 60 }, { x: 50, y: 89 },
+                { x: 34, y: 18 }, { x: 66, y: 36 }, { x: 7, y: 92 }, 
+                { x: 95, y: 52 }
+            ];
+
+            // ==================== СОХРАНЕНИЕ ====================
+            function loadProgress() {
+                try {
+                    const saved = localStorage.getItem('raspyatie_secrets');
+                    if (saved) {
+                        secretFound = new Set(JSON.parse(saved));
+                    }
+                } catch (e) {
+                    console.log('Нет сохранений');
+                }
+                updateCounter();
+            }
+
+            function saveProgress() {
+                try {
+                    localStorage.setItem('raspyatie_secrets', 
+                        JSON.stringify([...secretFound]));
+                } catch (e) {
+                    console.log('Не удалось сохранить');
+                }
+                updateCounter();
+            }
+
+            function updateCounter() {
+                counter.textContent = `СЕКРЕТЫ: ${secretFound.size}/10`;
+                worldPhase = secretFound.size;
+                
+                if (secretFound.size === 10) {
+                    setTimeout(showEnding, 2000);
+                }
+            }
+
+            function showNotification(text) {
+                notification.textContent = text;
+                notification.style.opacity = '1';
+                setTimeout(() => {
+                    notification.style.opacity = '0';
+                }, 2000);
+            }
+
+            // ==================== ШУМ ====================
+            function resizeCanvas() {
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
+                hallCanvas.width = window.innerWidth;
+                hallCanvas.height = window.innerHeight;
+            }
+
+            resizeCanvas();
+            window.addEventListener('resize', resizeCanvas);
+
+            function drawNoise() {
+                const w = canvas.width;
+                const h = canvas.height;
+                const img = ctx.createImageData(w, h);
+                const data = img.data;
+
+                for (let i = 0; i < data.length; i += 4) {
+                    const value = Math.random() * 255;
+                    data[i] = value;
+                    data[i + 1] = value;
+                    data[i + 2] = value;
+                    data[i + 3] = Math.random() * 30;
+                }
+
+                ctx.putImageData(img, 0, 0);
+
+                // Горизонтальные линии
+                ctx.fillStyle = 'rgba(255,255,255,0.03)';
+                for (let i = 0; i < 5; i++) {
+                    const y = Math.random() * h;
+                    ctx.fillRect(0, y, w, 1 + Math.random() * 3);
+                }
+
+                requestAnimationFrame(drawNoise);
+            }
+
+            drawNoise();
+
+            // ==================== ТЕЛЕВИЗОР ====================
+            function randomSignal() {
+                if (signalBroken) return;
+                
+                if (Math.random() < 0.3) {
+                    screen.textContent = glitches[Math.floor(Math.random() * glitches.length)];
+                } else {
+                    screen.textContent = names[Math.floor(Math.random() * names.length)];
+                }
+            }
+
+            setInterval(randomSignal, 1500);
+
+            // ==================== МЫШЬ ====================
+            document.addEventListener('mousemove', (e) => {
+                mouseX = e.clientX;
+                mouseY = e.clientY;
+            });
+
+            // ==================== КЛИКИ ====================
+            title.addEventListener('click', () => {
+                activateSecret(0);
+            });
+
+            tv.addEventListener('click', () => {
+                const randomSecret = Math.floor(Math.random() * 10);
+                activateSecret(randomSecret);
+            });
+
+            leftCross.addEventListener('click', () => {
+                activateSecret(4);
+            });
+
+            rightCross.addEventListener('click', () => {
+                activateSecret(3);
+            });
+
+            // Создаем секретные точки
+            function createSecretPoints() {
+                secretPositions.forEach((pos, index) => {
+                    const secret = document.createElement('div');
+                    secret.className = 'secret';
+                    secret.setAttribute('data-index', index);
+                    
+                    // Позиционируем по центру
+                    const x = (pos.x / 100) * window.innerWidth;
+                    const y = (pos.y / 100) * window.innerHeight;
+                    
+                    secret.style.left = (x - 15) + 'px';
+                    secret.style.top = (y - 15) + 'px';
+                    
+                    // Если уже найден - отмечаем
+                    if (secretFound.has(index)) {
+                        secret.classList.add('found');
+                    }
+                    
+                    // Добавляем обработчик
+                    secret.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        activateSecret(index);
+                    });
+                    
+                    document.body.appendChild(secret);
+                });
+            }
+
+            // ==================== АКТИВАЦИЯ СЕКРЕТОВ ====================
+            function activateSecret(index) {
+                if (secretFound.has(index)) {
+                    showNotification('Уже найдено');
+                    return;
+                }
+                
+                secretFound.add(index);
+                saveProgress();
+                
+                // Отмечаем точку как найденную
+                const secretElements = document.querySelectorAll('.secret');
+                secretElements.forEach(el => {
+                    if (parseInt(el.getAttribute('data-index')) === index) {
+                        el.classList.add('found');
+                    }
+                });
+                
+                // Уведомление
+                showNotification(`Секрет ${index + 1} найден!`);
+                
+                // Визуальный отклик
+                flashEffect();
+                
+                // Активируем эффект
+                switch (index) {
+                    case 0: brokenFrame(); break;
+                    case 1: fakeCursorEvent(); break;
+                    case 2: redPulse(); break;
+                    case 3: mirrorWorld(); break;
+                    case 4: disappearingCross(); break;
+                    case 5: hallSequence(); break;
+                    case 6: shadowEntity(); break;
+                    case 7: deadSignal(); break;
+                    case 8: echoPage(); break;
+                    case 9: lastBreath(); break;
+                }
+            }
+
+            function flashEffect() {
+                document.body.style.backgroundColor = '#111';
+                setTimeout(() => {
+                    document.body.style.backgroundColor = '#0a0a0a';
+                }, 100);
+            }
+
+            // ==================== ЭФФЕКТЫ ====================
+            function brokenFrame() {
+                let count = 0;
+                const interval = setInterval(() => {
+                    scene.style.transform = `translate(${Math.random() * 20 - 10}px, ${Math.random() * 15 - 7}px)`;
+                    scene.style.filter = `contrast(${120 + Math.random() * 80}%)`;
+                    title.style.opacity = Math.random() < 0.4 ? '0.3' : '1';
+                    
+                    count++;
+                    if (count > 20) {
+                        clearInterval(interval);
+                        scene.style.transform = '';
+                        scene.style.filter = '';
+                        title.style.opacity = '1';
+                    }
+                }, 80);
+            }
+
+            function fakeCursorEvent() {
+                fakeCursor.style.display = 'block';
+                let fx = mouseX, fy = mouseY;
+                
+                const interval = setInterval(() => {
+                    fx += (mouseX - fx) * 0.1;
+                    fy += (mouseY - fy) * 0.1;
+                    
+                    fakeCursor.style.left = fx + 'px';
+                    fakeCursor.style.top = fy + 'px';
+                    
+                    if (Math.random() < 0.1) {
+                        fakeCursor.style.opacity = '0.2';
+                    } else {
+                        fakeCursor.style.opacity = '0.8';
+                    }
+                }, 50);
+                
+                setTimeout(() => {
+                    clearInterval(interval);
+                    fakeCursor.style.display = 'none';
+                }, 6000);
+            }
+
+            function redPulse() {
+                let count = 0;
+                const interval = setInterval(() => {
+                    redFrame.style.opacity = Math.random() * 0.8;
+                    scene.style.filter = `brightness(${80 + Math.random() * 40}%) contrast(150%)`;
+                    
+                    count++;
+                    if (count > 15) {
+                        clearInterval(interval);
+                        redFrame.style.opacity = '0';
+                        scene.style.filter = '';
+                    }
+                }, 100);
+            }
+
+            function mirrorWorld() {
+                scene.style.transform = 'scaleX(-1)';
+                subtitle.style.opacity = '0.1';
+                
+                setTimeout(() => {
+                    scene.style.transform = '';
+                    subtitle.style.opacity = '0.5';
+                }, 5000);
+            }
+
+            function disappearingCross() {
+                let visible = true;
+                const interval = setInterval(() => {
+                    visible = !visible;
+                    leftCross.style.opacity = visible ? '1' : '0.2';
+                }, 200);
+                
+                setTimeout(() => {
+                    clearInterval(interval);
+                    leftCross.style.opacity = '1';
+                }, 4000);
+            }
+
+            function hallSequence() {
+                hallCanvas.style.display = 'block';
+                const hctx = hallCanvas.getContext('2d');
+                let depth = 0;
+                let running = true;
+                
+                function drawHall() {
+                    if (!running) return;
+                    
+                    depth += 0.02;
+                    const w = hallCanvas.width;
+                    const h = hallCanvas.height;
+                    
+                    hctx.fillStyle = '#000';
+                    hctx.fillRect(0, 0, w, h);
+                    
+                    const cx = w / 2;
+                    const cy = h / 2;
+                    
+                    for (let i = 0; i < 20; i++) {
+                        const z = (i + depth) % 20;
+                        const scale = 1 - z / 20;
+                        const width = w * scale * 0.8;
+                        const height = h * scale * 0.8;
+                        
+                        hctx.strokeStyle = `rgba(100,100,100,${scale * 0.3})`;
+                        hctx.lineWidth = 2;
+                        hctx.strokeRect(cx - width/2, cy - height/2, width, height);
+                    }
+                    
+                    if (running) {
+                        requestAnimationFrame(drawHall);
+                    }
+                }
+                
+                drawHall();
+                
+                setTimeout(() => {
+                    running = false;
+                    hallCanvas.style.display = 'none';
+                }, 6000);
+            }
+
+            function shadowEntity() {
+                shadow.style.display = 'block';
+                let sx = mouseX, sy = mouseY;
+                
+                const interval = setInterval(() => {
+                    sx += (mouseX - sx) * 0.08;
+                    sy += (mouseY - sy) * 0.08;
+                    
+                    shadow.style.left = sx + 'px';
+                    shadow.style.top = sy + 'px';
+                    
+                    if (Math.random() < 0.1) {
+                        shadow.style.opacity = '0.3';
+                    } else {
+                        shadow.style.opacity = '0.8';
+                    }
+                }, 50);
+                
+                setTimeout(() => {
+                    clearInterval(interval);
+                    shadow.style.display = 'none';
+                }, 7000);
+            }
+
+            function deadSignal() {
+                signalBroken = true;
+                tv.style.filter = 'grayscale(100%) contrast(200%)';
+                
+                let count = 0;
+                const interval = setInterval(() => {
+                    screen.textContent = glitches[Math.floor(Math.random() * glitches.length)];
+                    
+                    count++;
+                    if (count > 40) {
+                        clearInterval(interval);
+                        tv.style.filter = '';
+                        signalBroken = false;
+                        screen.textContent = names[Math.floor(Math.random() * names.length)];
+                    }
+                }, 100);
+            }
+
+            function echoPage() {
+                const echoes = [];
+                
+                for (let i = 0; i < 5; i++) {
+                    const echo = scene.cloneNode(true);
+                    echo.classList.add('echo');
+                    echo.style.transform = `translate(${Math.random() * 40 - 20}px, ${Math.random() * 30 - 15}px)`;
+                    echo.style.filter = `blur(${Math.random() * 3}px)`;
+                    document.body.appendChild(echo);
+                    echoes.push(echo);
+                }
+                
+                setTimeout(() => {
+                    echoes.forEach(e => e.remove());
+                }, 3000);
+            }
+
+            function lastBreath() {
+                let count = 0;
+                const interval = setInterval(() => {
+                    count++;
+                    vhs.style.opacity = '0.2';
+                    scene.style.filter = `brightness(${100 - count}%)`;
+                    
+                    if (count > 60) {
+                        clearInterval(interval);
+                        vhs.style.opacity = '1';
+                        scene.style.filter = '';
+                    }
+                }, 100);
+            }
+
+            // ==================== ФИНАЛ ====================
+            function showEnding() {
+                ending.style.display = 'flex';
+                ending.style.opacity = '0';
+                
+                setTimeout(() => {
+                    ending.style.opacity = '1';
+                }, 100);
+                
+                signalBroken = true;
+                scene.style.filter = 'brightness(50%)';
+            }
+
+            // ==================== СБРОС ====================
+            document.addEventListener('keydown', (e) => {
+                if (e.shiftKey && e.key.toLowerCase() === 'r') {
+                    secretFound.clear();
+                    saveProgress();
+                    localStorage.removeItem('raspyatie_secrets');
+                    location.reload();
+                }
+            });
+
+            // ==================== ИНИЦИАЛИЗАЦИЯ ====================
+            loadProgress();
+            createSecretPoints();
+            randomSignal();
+
+            // Показываем подсказку
+            setTimeout(() => {
+                const hint = document.getElementById('hint');
+                if (hint) {
+                    hint.style.opacity = '0';
+                }
+            }, 8000);
+
+            console.log('РАСПЯТИЕ — sad satan style');
+            console.log('Найди 10 секретов:');
+            console.log('- Кликай на заголовок');
+            console.log('- Кликай на кресты');
+            console.log('- Кликай на телевизор');
+            console.log('- Ищи скрытые точки');
+            console.log('Shift+R для сброса');
+        })();
+    </script>
+</body>
+</html>
