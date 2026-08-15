@@ -15,9 +15,9 @@
             width: 100%;
             height: 100%;
             overflow: hidden;
-            background: #0a0a0a;
+            background: #000;
             font-family: "Courier New", monospace;
-            color: #aaa;
+            color: #888;
             cursor: crosshair;
             user-select: none;
             -webkit-user-select: none;
@@ -29,7 +29,7 @@
             inset: 0;
             z-index: 1;
             pointer-events: none;
-            opacity: 0.25;
+            opacity: 0.35;
         }
 
         #vhs {
@@ -40,10 +40,17 @@
             background: repeating-linear-gradient(
                 transparent 0px,
                 transparent 2px,
-                rgba(255, 255, 255, 0.04) 3px,
-                rgba(255, 255, 255, 0.04) 4px
+                rgba(255, 255, 255, 0.06) 3px,
+                rgba(255, 255, 255, 0.06) 4px
             );
             mix-blend-mode: overlay;
+            animation: vhsDistortion 0.1s infinite;
+        }
+
+        @keyframes vhsDistortion {
+            0% { transform: translateY(0); }
+            50% { transform: translateY(-1px); }
+            100% { transform: translateY(0); }
         }
 
         #rgb {
@@ -51,30 +58,161 @@
             inset: 0;
             pointer-events: none;
             z-index: 4;
-            opacity: 0.06;
+            opacity: 0.1;
             background: linear-gradient(90deg, 
-                rgba(255, 0, 0, 0.3), 
+                rgba(255, 0, 0, 0.4), 
                 transparent, 
-                rgba(0, 120, 255, 0.3));
-            animation: rgbShift 8s infinite linear;
+                rgba(0, 120, 255, 0.4));
+            animation: rgbShift 5s infinite linear;
         }
 
         @keyframes rgbShift {
             0% { transform: translateX(0); }
-            25% { transform: translateX(2px); }
-            50% { transform: translateX(-2px); }
-            75% { transform: translateX(1px); }
+            25% { transform: translateX(3px); }
+            50% { transform: translateX(-3px); }
+            75% { transform: translateX(2px); }
             100% { transform: translateX(0); }
         }
 
         #vignette {
             position: fixed;
-            inset: -5%;
+            inset: -10%;
             pointer-events: none;
             z-index: 5;
             background: radial-gradient(circle, 
+                transparent 30%, 
+                rgba(0, 0, 0, 0.9));
+        }
+
+        /* ========== НОВЫЕ СТРАШНЫЕ ЭЛЕМЕНТЫ ========== */
+        #darknessPulse {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: 6;
+            background: #000;
+            opacity: 0;
+            animation: darknessPulse 8s infinite;
+        }
+
+        @keyframes darknessPulse {
+            0%, 90%, 100% { opacity: 0; }
+            92% { opacity: 0.7; }
+            94% { opacity: 0.1; }
+            96% { opacity: 0.5; }
+            98% { opacity: 0.2; }
+        }
+
+        #whisperText {
+            position: fixed;
+            top: 30%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: rgba(255, 0, 0, 0.4);
+            font-size: 24px;
+            pointer-events: none;
+            z-index: 70;
+            opacity: 0;
+            text-shadow: 0 0 10px rgba(255, 0, 0, 0.5);
+            transition: opacity 0.3s;
+            letter-spacing: 3px;
+        }
+
+        #jumpscare {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: 150;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            background: #000;
+        }
+
+        #jumpscare img, #jumpscare div {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            filter: contrast(200%) brightness(150%);
+        }
+
+        #breathingOverlay {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: 7;
+            background: radial-gradient(circle, 
                 transparent 40%, 
-                rgba(0, 0, 0, 0.8));
+                rgba(100, 0, 0, 0.3) 70%, 
+                rgba(0, 0, 0, 0.8) 100%);
+            animation: breathing 4s ease-in-out infinite;
+        }
+
+        @keyframes breathing {
+            0%, 100% { transform: scale(1); opacity: 0.3; }
+            50% { transform: scale(1.1); opacity: 0.5; }
+        }
+
+        #bloodDrip {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: 8;
+            background: repeating-linear-gradient(
+                0deg,
+                transparent 0px,
+                transparent 50px,
+                rgba(100, 0, 0, 0.1) 51px,
+                rgba(100, 0, 0, 0.1) 52px
+            );
+            animation: bloodDrip 10s linear infinite;
+        }
+
+        @keyframes bloodDrip {
+            0% { transform: translateY(-100%); }
+            100% { transform: translateY(100%); }
+        }
+
+        #eyeTracker {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            width: 100px;
+            height: 100px;
+            pointer-events: none;
+            z-index: 9;
+            opacity: 0;
+            transform: translate(-50%, -50%);
+            transition: opacity 0.5s;
+        }
+
+        .eye {
+            width: 30px;
+            height: 30px;
+            background: #fff;
+            border-radius: 50%;
+            position: absolute;
+            box-shadow: 0 0 20px rgba(255, 0, 0, 0.5);
+        }
+
+        .eye::after {
+            content: "";
+            width: 15px;
+            height: 15px;
+            background: #000;
+            border-radius: 50%;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .eye-left {
+            left: 0;
+        }
+
+        .eye-right {
+            right: 0;
         }
 
         /* ========== ОСНОВНАЯ СЦЕНА ========== */
@@ -93,42 +231,46 @@
         #title {
             font-size: 72px;
             letter-spacing: 12px;
-            color: #999;
+            color: #888;
             text-shadow: 
-                0 0 10px rgba(255, 0, 0, 0.3),
-                2px 2px 0 #000;
-            animation: titleFlicker 4s infinite;
+                0 0 20px rgba(255, 0, 0, 0.4),
+                0 0 40px rgba(0, 0, 0, 0.8),
+                3px 3px 0 #000;
+            animation: titleFlicker 3s infinite;
             cursor: pointer;
             z-index: 10;
             pointer-events: auto;
         }
 
         #title:hover {
-            color: #bbb;
-            text-shadow: 0 0 20px rgba(255, 0, 0, 0.5);
+            color: #aaa;
+            text-shadow: 0 0 30px rgba(255, 0, 0, 0.8);
         }
 
         @keyframes titleFlicker {
             0%, 100% { opacity: 1; }
-            45% { opacity: 0.3; }
-            46% { opacity: 0.9; }
-            47% { opacity: 0.2; }
-            48% { opacity: 0.8; }
+            40% { opacity: 0.2; }
+            41% { opacity: 0.9; }
+            42% { opacity: 0.1; }
+            43% { opacity: 0.8; }
+            44% { opacity: 0.3; }
+            45% { opacity: 1; }
         }
 
         #subtitle {
             margin-top: 10px;
             font-size: 16px;
-            opacity: 0.5;
+            opacity: 0.4;
             letter-spacing: 5px;
-            color: #888;
-            animation: subtitlePulse 6s infinite;
+            color: #666;
+            animation: subtitlePulse 4s infinite;
             pointer-events: none;
+            text-shadow: 0 0 10px rgba(0, 0, 0, 0.8);
         }
 
         @keyframes subtitlePulse {
-            0%, 100% { opacity: 0.5; }
-            50% { opacity: 0.2; }
+            0%, 100% { opacity: 0.4; }
+            50% { opacity: 0.1; }
         }
 
         .crosses {
@@ -143,15 +285,15 @@
             position: relative;
             width: 160px;
             height: 300px;
-            filter: drop-shadow(0 0 15px rgba(255, 255, 255, 0.05));
+            filter: drop-shadow(0 0 20px rgba(255, 0, 0, 0.2));
             transition: all 0.5s ease;
             cursor: pointer;
             pointer-events: auto;
         }
 
         .cross:hover {
-            filter: drop-shadow(0 0 25px rgba(255, 0, 0, 0.3));
-            transform: scale(1.05);
+            filter: drop-shadow(0 0 40px rgba(255, 0, 0, 0.5));
+            transform: scale(1.1) rotate(2deg);
         }
 
         .post {
@@ -159,8 +301,10 @@
             left: 71px;
             width: 18px;
             height: 100%;
-            background: linear-gradient(#3a2a1a, #1a120a);
-            box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.5);
+            background: linear-gradient(#2a1a0a, #0a0500);
+            box-shadow: 
+                inset 0 0 20px rgba(0, 0, 0, 0.8),
+                0 0 10px rgba(255, 0, 0, 0.3);
             pointer-events: none;
         }
 
@@ -170,8 +314,10 @@
             left: 10px;
             width: 140px;
             height: 18px;
-            background: linear-gradient(#3a2a1a, #1a120a);
-            box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.5);
+            background: linear-gradient(#2a1a0a, #0a0500);
+            box-shadow: 
+                inset 0 0 20px rgba(0, 0, 0, 0.8),
+                0 0 10px rgba(255, 0, 0, 0.3);
             pointer-events: none;
         }
 
@@ -185,20 +331,20 @@
             top: 90px;
             width: 2px;
             height: 60px;
-            background: #6a5a3a;
+            background: #4a3a2a;
             transform-origin: top;
-            animation: swing 7s ease-in-out infinite;
+            animation: swing 5s ease-in-out infinite;
             pointer-events: none;
         }
 
         .r1 { left: 15px; }
-        .r2 { left: 40px; animation-delay: 1s; }
-        .r3 { left: 100px; animation-delay: 0.5s; }
-        .r4 { left: 125px; animation-delay: 1.5s; }
+        .r2 { left: 40px; animation-delay: 0.7s; }
+        .r3 { left: 100px; animation-delay: 0.3s; }
+        .r4 { left: 125px; animation-delay: 1s; }
 
         @keyframes swing {
-            0%, 100% { transform: rotate(-4deg); }
-            50% { transform: rotate(7deg); }
+            0%, 100% { transform: rotate(-6deg); }
+            50% { transform: rotate(8deg); }
         }
 
         .man {
@@ -209,21 +355,32 @@
             height: 18px;
             background: #000;
             border-radius: 5px;
-            box-shadow: 0 0 5px rgba(255, 0, 0, 0.2);
+            box-shadow: 
+                0 0 10px rgba(255, 0, 0, 0.4),
+                0 0 20px rgba(255, 0, 0, 0.2);
             pointer-events: none;
+            animation: manTwitch 3s infinite;
+        }
+
+        @keyframes manTwitch {
+            0%, 95%, 100% { transform: translateX(0); }
+            96% { transform: translateX(-3px) rotate(-5deg); }
+            97% { transform: translateX(3px) rotate(5deg); }
+            98% { transform: translateX(-2px); }
+            99% { transform: translateX(2px); }
         }
 
         #tv {
             width: 220px;
             height: 120px;
-            background: #0a0a0a;
-            border: 4px solid #3a3a3a;
+            background: #000;
+            border: 4px solid #2a2a2a;
             display: flex;
             justify-content: center;
             align-items: center;
             box-shadow: 
-                0 0 20px rgba(0, 255, 0, 0.05),
-                inset 0 0 20px rgba(0, 0, 0, 0.5);
+                0 0 30px rgba(255, 0, 0, 0.2),
+                inset 0 0 30px rgba(0, 0, 0, 0.8);
             position: relative;
             overflow: hidden;
             cursor: pointer;
@@ -234,30 +391,25 @@
 
         #tv:hover {
             box-shadow: 
-                0 0 30px rgba(0, 255, 0, 0.15),
-                inset 0 0 20px rgba(0, 0, 0, 0.5);
-            border-color: #4a4a4a;
-        }
-
-        #tv::before {
-            content: "";
-            position: absolute;
-            inset: 0;
-            background: repeating-linear-gradient(
-                transparent 0px,
-                transparent 2px,
-                rgba(255, 255, 255, 0.03) 3px,
-                rgba(255, 255, 255, 0.03) 4px
-            );
-            pointer-events: none;
+                0 0 50px rgba(255, 0, 0, 0.4),
+                inset 0 0 30px rgba(0, 0, 0, 0.8);
+            border-color: #3a0000;
         }
 
         #screen {
             font-size: 24px;
-            color: #6a8a6a;
-            text-shadow: 0 0 8px rgba(0, 255, 0, 0.3);
+            color: #4a6a4a;
+            text-shadow: 
+                0 0 15px rgba(255, 0, 0, 0.4),
+                0 0 30px rgba(0, 0, 0, 0.5);
             z-index: 2;
             pointer-events: none;
+            animation: screenFlicker 0.5s infinite;
+        }
+
+        @keyframes screenFlicker {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
         }
 
         #counter {
@@ -266,9 +418,9 @@
             right: 20px;
             z-index: 100;
             font-size: 14px;
-            color: #555;
+            color: #444;
             pointer-events: none;
-            text-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+            text-shadow: 0 0 5px rgba(255, 0, 0, 0.3);
         }
 
         #hint {
@@ -278,10 +430,11 @@
             transform: translateX(-50%);
             z-index: 100;
             font-size: 12px;
-            color: #444;
+            color: #333;
             pointer-events: none;
             text-align: center;
             transition: opacity 2s;
+            text-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
         }
 
         .secret {
@@ -290,8 +443,8 @@
             height: 35px;
             border-radius: 50%;
             cursor: pointer;
-            background: rgba(255, 255, 255, 0.03);
-            border: 2px solid rgba(255, 255, 255, 0.08);
+            background: rgba(255, 0, 0, 0.05);
+            border: 2px solid rgba(255, 0, 0, 0.15);
             transition: all 0.3s ease;
             z-index: 50;
             pointer-events: auto;
@@ -301,31 +454,32 @@
         }
 
         .secret:hover {
-            background: rgba(255, 0, 0, 0.15);
-            border-color: rgba(255, 0, 0, 0.4);
-            box-shadow: 0 0 20px rgba(255, 0, 0, 0.4);
-            transform: scale(1.3);
+            background: rgba(255, 0, 0, 0.25);
+            border-color: rgba(255, 0, 0, 0.6);
+            box-shadow: 0 0 30px rgba(255, 0, 0, 0.6);
+            transform: scale(1.4);
         }
 
         .secret::after {
             content: "";
             width: 5px;
             height: 5px;
-            background: rgba(255, 255, 255, 0.4);
+            background: rgba(255, 0, 0, 0.5);
             border-radius: 50%;
+            box-shadow: 0 0 10px rgba(255, 0, 0, 0.5);
         }
 
         .secret.found {
-            background: rgba(0, 255, 0, 0.1);
-            border-color: rgba(0, 255, 0, 0.3);
+            background: rgba(255, 0, 0, 0.1);
+            border-color: rgba(255, 0, 0, 0.3);
             pointer-events: none;
-            opacity: 0.3;
+            opacity: 0.2;
         }
 
         #redFrame {
             position: fixed;
             inset: 0;
-            background: rgba(100, 0, 0, 0.3);
+            background: rgba(100, 0, 0, 0.4);
             pointer-events: none;
             z-index: 60;
             opacity: 0;
@@ -344,26 +498,26 @@
             position: fixed;
             width: 16px;
             height: 16px;
-            border: 2px solid rgba(255, 255, 255, 0.5);
+            border: 2px solid rgba(255, 0, 0, 0.5);
             transform: rotate(45deg);
             pointer-events: none;
             z-index: 120;
             display: none;
-            animation: cursorBlink 0.5s infinite;
+            animation: cursorBlink 0.3s infinite;
         }
 
         @keyframes cursorBlink {
             0%, 100% { opacity: 0.8; }
-            50% { opacity: 0.2; }
+            50% { opacity: 0.1; }
         }
 
         #shadow {
             position: fixed;
-            width: 30px;
-            height: 30px;
-            background: rgba(0, 0, 0, 0.8);
+            width: 50px;
+            height: 50px;
+            background: rgba(0, 0, 0, 0.9);
             border-radius: 50%;
-            filter: blur(10px);
+            filter: blur(15px);
             pointer-events: none;
             z-index: 110;
             display: none;
@@ -383,8 +537,9 @@
 
         #ending .cross {
             font-size: 120px;
-            color: #666;
-            animation: spin 20s linear infinite;
+            color: #444;
+            animation: spin 10s linear infinite;
+            text-shadow: 0 0 50px rgba(255, 0, 0, 0.5);
         }
 
         @keyframes spin {
@@ -394,7 +549,7 @@
         .echo {
             position: fixed;
             inset: 0;
-            opacity: 0.15;
+            opacity: 0.2;
             pointer-events: none;
             mix-blend-mode: screen;
             z-index: 60;
@@ -405,14 +560,56 @@
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            color: #666;
-            font-size: 18px;
+            color: #600;
+            font-size: 20px;
             pointer-events: none;
             z-index: 150;
             opacity: 0;
             transition: opacity 0.5s;
             text-align: center;
-            text-shadow: 0 0 10px rgba(0, 0, 0, 0.8);
+            text-shadow: 
+                0 0 10px rgba(255, 0, 0, 0.5),
+                0 0 20px rgba(0, 0, 0, 0.8);
+            letter-spacing: 2px;
+        }
+
+        /* ========== НОВЫЕ СТРАШНЫЕ ЭФФЕКТЫ ========== */
+        #faceOverlay {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: 80;
+            display: none;
+            background: 
+                radial-gradient(circle at 50% 50%, 
+                    rgba(255, 0, 0, 0.1) 0%,
+                    rgba(0, 0, 0, 0.3) 40%,
+                    rgba(0, 0, 0, 0.8) 100%);
+        }
+
+        #faceOverlay::before {
+            content: "👁";
+            position: absolute;
+            top: 40%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 200px;
+            opacity: 0.1;
+            filter: blur(5px);
+        }
+
+        #creepyText {
+            position: fixed;
+            top: 70%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: rgba(255, 0, 0, 0.3);
+            font-size: 40px;
+            pointer-events: none;
+            z-index: 90;
+            opacity: 0;
+            text-shadow: 0 0 30px rgba(255, 0, 0, 0.5);
+            letter-spacing: 10px;
         }
 
         @media (max-width: 768px) {
@@ -437,6 +634,18 @@
     <div id="vhs"></div>
     <div id="rgb"></div>
     <div id="vignette"></div>
+    <div id="darknessPulse"></div>
+    <div id="breathingOverlay"></div>
+    <div id="bloodDrip"></div>
+    <div id="eyeTracker">
+        <div class="eye eye-left"></div>
+        <div class="eye eye-right"></div>
+    </div>
+    <div id="whisperText"></div>
+    <div id="creepyText"></div>
+    <div id="faceOverlay"></div>
+    <div id="jumpscare"></div>
+    
     <div id="counter">СЕКРЕТЫ: 0/10</div>
     <div id="hint">Кликай на элементы... Ищи скрытые точки... Shift+R — сброс</div>
     <div class="notification" id="notification"></div>
@@ -473,7 +682,8 @@
 
     <div id="ending">
         <div class="cross">✝</div>
-        <div style="color: #666; font-size: 20px;">ТЫ НАШЁЛ ВСЁ</div>
+        <div style="color: #400; font-size: 24px; text-shadow: 0 0 20px rgba(255,0,0,0.5);">ТЫ НАШЁЛ ВСЁ</div>
+        <div style="color: #300; font-size: 16px;">ТЕПЕРЬ ОНИ НАЙДУТ ТЕБЯ</div>
     </div>
 
     <script>
@@ -498,6 +708,11 @@
             const shadow = document.getElementById('shadow');
             const ending = document.getElementById('ending');
             const notification = document.getElementById('notification');
+            const whisperText = document.getElementById('whisperText');
+            const creepyText = document.getElementById('creepyText');
+            const faceOverlay = document.getElementById('faceOverlay');
+            const jumpscare = document.getElementById('jumpscare');
+            const eyeTracker = document.getElementById('eyeTracker');
             const noise = document.getElementById('noise');
             const vhs = document.getElementById('vhs');
             const rgb = document.getElementById('rgb');
@@ -507,10 +722,25 @@
             let signalBroken = false;
             let secretFound = new Set();
             let worldPhase = 0;
+            let jumpscareTriggered = false;
+            let lastWhisper = 0;
 
             // ==================== ДАННЫЕ ====================
-            const names = ['Никола', 'Авель', 'Даниил', 'Серафим', 'ЖЕРТВА', 'ОТЕЦ'];
-            const glitches = ['▒▒▒▒▒▒', '▓▓▓▓▓▓', '//////', '......', '██████', '::::::', '------', '╬╬╬╬╬╬', '☠☠☠☠☠☠'];
+            const names = ['Никола', 'Авель', 'Даниил', 'Серафим', 'ЖЕРТВА', 'ОТЕЦ', 'УБИЙЦА', 'СМЕРТЬ'];
+            const glitches = ['▒▒▒▒▒▒', '▓▓▓▓▓▓', '//////', '......', '██████', '::::::', '------', '╬╬╬╬╬╬', '☠☠☠☠☠☠', 'ѪѪѪѪѪѪ'];
+            
+            const whispers = [
+                'ОН ВИДИТ ТЕБЯ',
+                'НЕ ОБОРАЧИВАЙСЯ',
+                'ТЫ СЛЕДУЮЩИЙ',
+                'БЕГИ',
+                'СЛИШКОМ ПОЗДНО',
+                'ОНИ УЖЕ ЗДЕСЬ',
+                'ПОСМОТРИ ЗА СПИНУ',
+                'НЕ ВЕРЬ ЭКРАНУ',
+                'ЭТО НЕ ИГРА',
+                'ТВОЯ ДУША'
+            ];
             
             const secretPositions = [
                 { x: 8, y: 12 }, { x: 91, y: 10 }, { x: 50, y: 26 }, 
@@ -581,16 +811,16 @@
                     data[i] = value;
                     data[i + 1] = value;
                     data[i + 2] = value;
-                    data[i + 3] = Math.random() * 30;
+                    data[i + 3] = Math.random() * 40;
                 }
 
                 ctx.putImageData(img, 0, 0);
 
                 // Горизонтальные линии
-                ctx.fillStyle = 'rgba(255,255,255,0.03)';
-                for (let i = 0; i < 5; i++) {
+                ctx.fillStyle = 'rgba(255,255,255,0.05)';
+                for (let i = 0; i < 8; i++) {
                     const y = Math.random() * h;
-                    ctx.fillRect(0, y, w, 1 + Math.random() * 3);
+                    ctx.fillRect(0, y, w, 1 + Math.random() * 5);
                 }
 
                 requestAnimationFrame(drawNoise);
@@ -602,19 +832,61 @@
             function randomSignal() {
                 if (signalBroken) return;
                 
-                if (Math.random() < 0.3) {
+                if (Math.random() < 0.4) {
                     screen.textContent = glitches[Math.floor(Math.random() * glitches.length)];
                 } else {
                     screen.textContent = names[Math.floor(Math.random() * names.length)];
                 }
             }
 
-            setInterval(randomSignal, 1500);
+            setInterval(randomSignal, 1200);
 
-            // ==================== МЫШЬ ====================
+            // ==================== ШЁПОТ ====================
+            function showWhisper() {
+                const now = Date.now();
+                if (now - lastWhisper < 5000) return;
+                lastWhisper = now;
+                
+                const whisper = whispers[Math.floor(Math.random() * whispers.length)];
+                whisperText.textContent = whisper;
+                whisperText.style.opacity = '1';
+                
+                setTimeout(() => {
+                    whisperText.style.opacity = '0';
+                }, 2000);
+            }
+
+            setInterval(() => {
+                if (Math.random() < 0.15) {
+                    showWhisper();
+                }
+            }, 8000);
+
+            // ==================== СЛЕЖКА ГЛАЗАМИ ====================
+            function updateEyeTracking() {
+                const eyes = document.querySelectorAll('.eye');
+                const centerX = window.innerWidth / 2;
+                const centerY = window.innerHeight / 2;
+                
+                const dx = mouseX - centerX;
+                const dy = mouseY - centerY;
+                
+                const angle = Math.atan2(dy, dx);
+                const distance = Math.min(10, Math.sqrt(dx*dx + dy*dy) / 100);
+                
+                const offsetX = Math.cos(angle) * distance;
+                const offsetY = Math.sin(angle) * distance;
+                
+                eyes.forEach(eye => {
+                    const pupil = eye.querySelector('::after');
+                    eye.style.transform = `translate(${offsetX}px, ${offsetY}px)`;
+                });
+            }
+
             document.addEventListener('mousemove', (e) => {
                 mouseX = e.clientX;
                 mouseY = e.clientY;
+                updateEyeTracking();
             });
 
             // ==================== КЛИКИ ====================
@@ -642,19 +914,16 @@
                     secret.className = 'secret';
                     secret.setAttribute('data-index', index);
                     
-                    // Позиционируем по центру
                     const x = (pos.x / 100) * window.innerWidth;
                     const y = (pos.y / 100) * window.innerHeight;
                     
                     secret.style.left = (x - 15) + 'px';
                     secret.style.top = (y - 15) + 'px';
                     
-                    // Если уже найден - отмечаем
                     if (secretFound.has(index)) {
                         secret.classList.add('found');
                     }
                     
-                    // Добавляем обработчик
                     secret.addEventListener('click', (e) => {
                         e.stopPropagation();
                         activateSecret(index);
@@ -674,7 +943,6 @@
                 secretFound.add(index);
                 saveProgress();
                 
-                // Отмечаем точку как найденную
                 const secretElements = document.querySelectorAll('.secret');
                 secretElements.forEach(el => {
                     if (parseInt(el.getAttribute('data-index')) === index) {
@@ -682,13 +950,9 @@
                     }
                 });
                 
-                // Уведомление
                 showNotification(`Секрет ${index + 1} найден!`);
-                
-                // Визуальный отклик
                 flashEffect();
                 
-                // Активируем эффект
                 switch (index) {
                     case 0: brokenFrame(); break;
                     case 1: fakeCursorEvent(); break;
@@ -701,31 +965,106 @@
                     case 8: echoPage(); break;
                     case 9: lastBreath(); break;
                 }
+                
+                // Шанс на джампскейр
+                if (secretFound.size >= 3 && Math.random() < 0.3) {
+                    triggerJumpscare();
+                }
             }
 
             function flashEffect() {
                 document.body.style.backgroundColor = '#111';
                 setTimeout(() => {
-                    document.body.style.backgroundColor = '#0a0a0a';
+                    document.body.style.backgroundColor = '#000';
                 }, 100);
             }
+
+            // ==================== ДЖАМПСКЕЙР ====================
+            function triggerJumpscare() {
+                if (jumpscareTriggered) return;
+                jumpscareTriggered = true;
+                
+                jumpscare.style.display = 'flex';
+                jumpscare.innerHTML = '<div style="width:100%;height:100%;background:#000;display:flex;justify-content:center;align-items:center;"><div style="font-size:200px;opacity:0.8;filter:blur(3px);">👁</div></div>';
+                
+                // Играем громкий эффект
+                const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                const oscillator = audioContext.createOscillator();
+                const gainNode = audioContext.createGain();
+                
+                oscillator.connect(gainNode);
+                gainNode.connect(audioContext.destination);
+                
+                oscillator.frequency.setValueAtTime(800, audioContext.currentTime);
+                oscillator.frequency.exponentialRampToValueAtTime(100, audioContext.currentTime + 0.3);
+                
+                gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
+                gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.3);
+                
+                oscillator.start(audioContext.currentTime);
+                oscillator.stop(audioContext.currentTime + 0.3);
+                
+                setTimeout(() => {
+                    jumpscare.style.display = 'none';
+                    jumpscareTriggered = false;
+                }, 300);
+            }
+
+            // ==================== СЛУЧАЙНЫЕ СТРАШНЫЕ ЭФФЕКТЫ ====================
+            function showCreepyText() {
+                const texts = [
+                    'ОН ЗДЕСЬ',
+                    'БЕГИ',
+                    'СМОТРИ',
+                    'ТЫ ВИДЕЛ',
+                    'НЕ СПИ'
+                ];
+                
+                creepyText.textContent = texts[Math.floor(Math.random() * texts.length)];
+                creepyText.style.opacity = '1';
+                
+                setTimeout(() => {
+                    creepyText.style.opacity = '0';
+                }, 1500);
+            }
+
+            function showFace() {
+                faceOverlay.style.display = 'block';
+                setTimeout(() => {
+                    faceOverlay.style.display = 'none';
+                }, 500);
+            }
+
+            setInterval(() => {
+                if (Math.random() < 0.05) {
+                    showCreepyText();
+                }
+                if (Math.random() < 0.03) {
+                    showFace();
+                }
+                if (Math.random() < 0.02 && secretFound.size >= 5) {
+                    triggerJumpscare();
+                }
+            }, 10000);
 
             // ==================== ЭФФЕКТЫ ====================
             function brokenFrame() {
                 let count = 0;
                 const interval = setInterval(() => {
-                    scene.style.transform = `translate(${Math.random() * 20 - 10}px, ${Math.random() * 15 - 7}px)`;
-                    scene.style.filter = `contrast(${120 + Math.random() * 80}%)`;
-                    title.style.opacity = Math.random() < 0.4 ? '0.3' : '1';
+                    scene.style.transform = `translate(${Math.random() * 30 - 15}px, ${Math.random() * 20 - 10}px) rotate(${Math.random() * 2 - 1}deg)`;
+                    scene.style.filter = `contrast(${150 + Math.random() * 100}%) blur(${Math.random() * 2}px)`;
+                    title.style.opacity = Math.random() < 0.4 ? '0.2' : '1';
+                    title.style.color = Math.random() < 0.3 ? '#f00' : '#888';
                     
                     count++;
-                    if (count > 20) {
+                    if (count > 25) {
                         clearInterval(interval);
                         scene.style.transform = '';
                         scene.style.filter = '';
                         title.style.opacity = '1';
+                        title.style.color = '#888';
                     }
-                }, 80);
+                }, 60);
             }
 
             function fakeCursorEvent() {
@@ -733,47 +1072,51 @@
                 let fx = mouseX, fy = mouseY;
                 
                 const interval = setInterval(() => {
-                    fx += (mouseX - fx) * 0.1;
-                    fy += (mouseY - fy) * 0.1;
+                    fx += (mouseX - fx) * 0.15;
+                    fy += (mouseY - fy) * 0.15;
                     
                     fakeCursor.style.left = fx + 'px';
                     fakeCursor.style.top = fy + 'px';
                     
-                    if (Math.random() < 0.1) {
-                        fakeCursor.style.opacity = '0.2';
+                    if (Math.random() < 0.2) {
+                        fakeCursor.style.opacity = '0.1';
+                        fakeCursor.style.borderColor = 'rgba(255,0,0,0.5)';
                     } else {
                         fakeCursor.style.opacity = '0.8';
+                        fakeCursor.style.borderColor = 'rgba(255,255,255,0.5)';
                     }
-                }, 50);
+                }, 30);
                 
                 setTimeout(() => {
                     clearInterval(interval);
                     fakeCursor.style.display = 'none';
-                }, 6000);
+                }, 5000);
             }
 
             function redPulse() {
                 let count = 0;
                 const interval = setInterval(() => {
-                    redFrame.style.opacity = Math.random() * 0.8;
-                    scene.style.filter = `brightness(${80 + Math.random() * 40}%) contrast(150%)`;
+                    redFrame.style.opacity = Math.random() * 0.9;
+                    scene.style.filter = `brightness(${50 + Math.random() * 50}%) contrast(200%) saturate(200%)`;
                     
                     count++;
-                    if (count > 15) {
+                    if (count > 20) {
                         clearInterval(interval);
                         redFrame.style.opacity = '0';
                         scene.style.filter = '';
                     }
-                }, 100);
+                }, 80);
             }
 
             function mirrorWorld() {
                 scene.style.transform = 'scaleX(-1)';
-                subtitle.style.opacity = '0.1';
+                subtitle.style.opacity = '0';
+                subtitle.textContent = 'ОН СМОТРИТ';
                 
                 setTimeout(() => {
                     scene.style.transform = '';
-                    subtitle.style.opacity = '0.5';
+                    subtitle.style.opacity = '0.4';
+                    subtitle.textContent = 'перевёрнутый крест';
                 }, 5000);
             }
 
@@ -781,13 +1124,20 @@
                 let visible = true;
                 const interval = setInterval(() => {
                     visible = !visible;
-                    leftCross.style.opacity = visible ? '1' : '0.2';
-                }, 200);
+                    leftCross.style.opacity = visible ? '1' : '0';
+                    
+                    if (!visible) {
+                        leftCross.style.transform = 'scale(1.2)';
+                    } else {
+                        leftCross.style.transform = 'scale(1)';
+                    }
+                }, 150);
                 
                 setTimeout(() => {
                     clearInterval(interval);
                     leftCross.style.opacity = '1';
-                }, 4000);
+                    leftCross.style.transform = 'scale(1)';
+                }, 3000);
             }
 
             function hallSequence() {
@@ -799,7 +1149,7 @@
                 function drawHall() {
                     if (!running) return;
                     
-                    depth += 0.02;
+                    depth += 0.03;
                     const w = hallCanvas.width;
                     const h = hallCanvas.height;
                     
@@ -809,16 +1159,22 @@
                     const cx = w / 2;
                     const cy = h / 2;
                     
-                    for (let i = 0; i < 20; i++) {
-                        const z = (i + depth) % 20;
-                        const scale = 1 - z / 20;
-                        const width = w * scale * 0.8;
-                        const height = h * scale * 0.8;
+                    for (let i = 0; i < 25; i++) {
+                        const z = (i + depth) % 25;
+                        const scale = 1 - z / 25;
+                        const width = w * scale * 0.9;
+                        const height = h * scale * 0.9;
                         
-                        hctx.strokeStyle = `rgba(100,100,100,${scale * 0.3})`;
+                        const alpha = scale * 0.3;
+                        hctx.strokeStyle = `rgba(100,0,0,${alpha})`;
                         hctx.lineWidth = 2;
                         hctx.strokeRect(cx - width/2, cy - height/2, width, height);
                     }
+                    
+                    // Добавляем тени в коридоре
+                    hctx.fillStyle = 'rgba(0,0,0,0.1)';
+                    hctx.fillRect(0, 0, w/3, h);
+                    hctx.fillRect(2*w/3, 0, w/3, h);
                     
                     if (running) {
                         requestAnimationFrame(drawHall);
@@ -830,7 +1186,7 @@
                 setTimeout(() => {
                     running = false;
                     hallCanvas.style.display = 'none';
-                }, 6000);
+                }, 5000);
             }
 
             function shadowEntity() {
@@ -838,68 +1194,78 @@
                 let sx = mouseX, sy = mouseY;
                 
                 const interval = setInterval(() => {
-                    sx += (mouseX - sx) * 0.08;
-                    sy += (mouseY - sy) * 0.08;
+                    sx += (mouseX - sx) * 0.1;
+                    sy += (mouseY - sy) * 0.1;
                     
                     shadow.style.left = sx + 'px';
                     shadow.style.top = sy + 'px';
                     
-                    if (Math.random() < 0.1) {
-                        shadow.style.opacity = '0.3';
+                    if (Math.random() < 0.15) {
+                        shadow.style.opacity = '0.2';
+                        shadow.style.width = '70px';
+                        shadow.style.height = '70px';
                     } else {
-                        shadow.style.opacity = '0.8';
+                        shadow.style.opacity = '0.9';
+                        shadow.style.width = '50px';
+                        shadow.style.height = '50px';
                     }
-                }, 50);
+                }, 40);
                 
                 setTimeout(() => {
                     clearInterval(interval);
                     shadow.style.display = 'none';
-                }, 7000);
+                }, 5000);
             }
 
             function deadSignal() {
                 signalBroken = true;
-                tv.style.filter = 'grayscale(100%) contrast(200%)';
+                tv.style.filter = 'grayscale(100%) contrast(300%) brightness(50%)';
                 
                 let count = 0;
                 const interval = setInterval(() => {
                     screen.textContent = glitches[Math.floor(Math.random() * glitches.length)];
+                    screen.style.color = '#f00';
                     
                     count++;
-                    if (count > 40) {
+                    if (count > 50) {
                         clearInterval(interval);
                         tv.style.filter = '';
+                        screen.style.color = '#4a6a4a';
                         signalBroken = false;
                         screen.textContent = names[Math.floor(Math.random() * names.length)];
                     }
-                }, 100);
+                }, 80);
             }
 
             function echoPage() {
                 const echoes = [];
                 
-                for (let i = 0; i < 5; i++) {
+                for (let i = 0; i < 7; i++) {
                     const echo = scene.cloneNode(true);
                     echo.classList.add('echo');
-                    echo.style.transform = `translate(${Math.random() * 40 - 20}px, ${Math.random() * 30 - 15}px)`;
-                    echo.style.filter = `blur(${Math.random() * 3}px)`;
+                    echo.style.transform = `translate(${Math.random() * 60 - 30}px, ${Math.random() * 40 - 20}px) scale(${0.8 + Math.random() * 0.4})`;
+                    echo.style.filter = `blur(${Math.random() * 5}px) brightness(${50 + Math.random() * 100}%)`;
                     document.body.appendChild(echo);
                     echoes.push(echo);
                 }
                 
                 setTimeout(() => {
                     echoes.forEach(e => e.remove());
-                }, 3000);
+                }, 4000);
             }
 
             function lastBreath() {
                 let count = 0;
                 const interval = setInterval(() => {
                     count++;
-                    vhs.style.opacity = '0.2';
-                    scene.style.filter = `brightness(${100 - count}%)`;
+                    vhs.style.opacity = '0.1';
+                    scene.style.filter = `brightness(${100 - count * 2}%) blur(${count * 0.1}px)`;
                     
-                    if (count > 60) {
+                    if (Math.random() < 0.3) {
+                        showWhisper();
+                    }
+                    
+                    if (count > 50) {
                         clearInterval(interval);
                         vhs.style.opacity = '1';
                         scene.style.filter = '';
@@ -917,7 +1283,14 @@
                 }, 100);
                 
                 signalBroken = true;
-                scene.style.filter = 'brightness(50%)';
+                scene.style.filter = 'brightness(30%) saturate(0%)';
+                
+                // Финальный шёпот
+                setTimeout(() => {
+                    whisperText.textContent = 'ТЫ ОБРЕЧЁН';
+                    whisperText.style.opacity = '1';
+                    whisperText.style.fontSize = '40px';
+                }, 1000);
             }
 
             // ==================== СБРОС ====================
@@ -935,6 +1308,11 @@
             createSecretPoints();
             randomSignal();
 
+            // Показываем глаза через некоторое время
+            setTimeout(() => {
+                eyeTracker.style.opacity = '0.05';
+            }, 10000);
+
             // Показываем подсказку
             setTimeout(() => {
                 const hint = document.getElementById('hint');
@@ -944,11 +1322,7 @@
             }, 8000);
 
             console.log('РАСПЯТИЕ — sad satan style');
-            console.log('Найди 10 секретов:');
-            console.log('- Кликай на заголовок');
-            console.log('- Кликай на кресты');
-            console.log('- Кликай на телевизор');
-            console.log('- Ищи скрытые точки');
+            console.log('Найди 10 секретов... если сможешь');
             console.log('Shift+R для сброса');
         })();
     </script>
